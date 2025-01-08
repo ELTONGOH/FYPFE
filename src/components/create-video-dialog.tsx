@@ -94,6 +94,17 @@ export function CreateVideoDialog({ isOpen, onClose, onSubmit, communityId }: Cr
     }
   };
 
+  const resetForm = () => {
+    setTitle('');
+    setDescription('');
+    setCategory('');
+    setType('');
+    setFee('');
+    setVideoLink('');
+    setThumbnailFile(null);
+    setThumbnailUrl('');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -117,10 +128,31 @@ export function CreateVideoDialog({ isOpen, onClose, onSubmit, communityId }: Cr
       mediaList: [{ mediaUrl: videoLink }],
     };
 
+    try {
+      await onSubmit(videoData);
+      toast({
+        title: "Success",
+        description: "Video created successfully.",
+      });
+      resetForm();
+      onClose();
+    } catch (error) {
+      console.error('Error creating video:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create video. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      if (!open) {
+        resetForm();
+        onClose();
+      }
+    }}>
       <DialogContent className="sm:max-w-[300px] p-0">
         <DialogHeader className="p-4 pb-0">
           <DialogTitle>Create New Video</DialogTitle>
@@ -226,7 +258,10 @@ export function CreateVideoDialog({ isOpen, onClose, onSubmit, communityId }: Cr
               )}
             </div>
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
+            <Button type="button" variant="outline" onClick={() => {
+                resetForm();
+                onClose();
+              }}>Cancel</Button>
               <Button type="submit">Create Video</Button>
             </DialogFooter>
           </form>

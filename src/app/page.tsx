@@ -15,9 +15,9 @@ export default function LoginPage() {
       <div className="w-full max-w-md space-y-8">
         <div className="flex flex-col items-center space-y-2 text-center">
           <Image
-            src="/placeholder.svg?height=48&width=48"
-            width={48}
-            height={48}
+            src="/images/e.jpg?height=80&width=80"
+            width={80}
+            height={80}
             alt="Logo"
             className="rounded-full bg-gray-200"
           />
